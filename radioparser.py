@@ -4,14 +4,15 @@ import pandas as pd
 import datetime
 
 
-current_week = None
-last_sunday = None
+current_week = 1
+last_sunday = datetime.date(2022, 8, 31)
 
 def update_current_week():
-    global current_week
+    global current_week, last_sunday
     cur_time = datetime.date.today()
     if cur_time - last_sunday > datetime.timedelta(days=7):
-        current_week += 1
+        current_week += (cur_time - last_sunday).days // 7
+        last_sunday = cur_time - datetime.timedelta(7+(cur_time.weekday() + 1) % 7)
 
 
 def get_link_table(url):
@@ -37,6 +38,7 @@ def get_link_table(url):
 
 def get_timetable(year, group):
     global current_week
+    update_current_week()
     year_column = str(year) + ' курс'
     table = get_link_table('https://rtf.sfedu.ru/raspis/')
     full_link = 'https://rtf.sfedu.ru/raspis/'
@@ -70,3 +72,4 @@ if __name__ == "__main__":
     update_current_week()
     print(current_week)
     print(get_timetable(1, 'РТао1-12'))
+    print(current_week)
