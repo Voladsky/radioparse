@@ -5,14 +5,15 @@ import datetime
 
 
 current_week = 1
-last_sunday = datetime.date(2022, 8, 31)
+last_sunday = datetime.date(2023, 2, 5)
 
 def update_current_week():
     global current_week, last_sunday
     cur_time = datetime.date.today()
     if cur_time - last_sunday > datetime.timedelta(days=7):
-        current_week += (cur_time - last_sunday).days // 7
-        last_sunday = cur_time - datetime.timedelta(7+(cur_time.weekday() + 1) % 7)
+        new_sunday = cur_time - datetime.timedelta((cur_time.weekday() + 1) % 7)
+        current_week += (new_sunday - last_sunday).days // 7
+
 
 
 def get_link_table(url):
@@ -51,10 +52,11 @@ def get_timetable(year, group):
     soup = BeautifulSoup(page.text, 'lxml')
     table = soup.find('table', attrs={"cellspacing": "3"})
     rows = []
+    print(full_link)
     for tr in table.findAll('tr'):
         row = []
         for td in tr.find_all('td'):
-            text = td.get_text('\n', strip=True).lower()
+            text = td.get_text(' ', strip=True).lower()
             a = td.find('a', href=True)
             href = None
             if a != None:
@@ -64,12 +66,9 @@ def get_timetable(year, group):
                 row.append(text)
         rows.append(row)
     #dftable = pd.DataFrame(rows[1:], columns=rows[0])
-    return rows
+    return list(map(list, zip(*rows[1:])))
 
 if __name__ == "__main__":
-    current_week = 16
-    last_sunday = datetime.date(2023, 5, 21)
-    update_current_week()
-    print(current_week)
-    print(get_timetable(1, 'РТао1-12'))
+    for row in get_timetable(1, 'РТао1-12'):
+        print(row)
     print(current_week)

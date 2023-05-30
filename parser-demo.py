@@ -1,17 +1,29 @@
 import tkinter as tk
+from tkinter import ttk
 import time
+import radioparser as rp
 
 
 def start_button_click():
     if agreed.get() == 1:
 
+        def create_table(table):
+            for i in range(len(table)):
+                for j in range(len(table[0])):
+                    e = tk.Entry(root, font=('Arial',12,'bold'))
+                    e.grid(row=i+5, column=j, rowspan=1, columnspan=1)
+                    e.insert(tk.END, table[i][j])
+                    e['state'] = 'disabled'
+
         def parse_click():
             # tyt parsitsya raspisanie
-            parse_result_text.set('...')
+            #parse_result_text.set('...')
             root.dooneevent()
             time.sleep(2)
-            parse_result_text.set(f"schedule has been parsed\n"
-                                  f"для курса {course_input.get()} группы {group_input.get()}")
+            #parse_result_text.set(f"schedule has been parsed\n"
+                                              #f"для курса {course_input.get()} группы {group_input.get()}")
+            create_table(rp.get_timetable(course_input.get(), group_input.get()))
+
 
         manual_root.destroy()
 
@@ -19,7 +31,7 @@ def start_button_click():
         root.bg = 'green'
         root.title('Парсер расписания на python')
         root.geometry('500x360')
-        root.resizable(width=False, height=False)
+        root.resizable(width=True, height=True)
 
         # всё про курс
         course_input = tk.IntVar(value=1)
@@ -30,7 +42,7 @@ def start_button_click():
         course_entry.grid(row=0, column=1, rowspan=2)
 
         # всё про группу
-        group_input = tk.IntVar(value=1)
+        group_input = tk.StringVar(value=1)
         group_label = tk.Label(root, text="Группа:")
         group_entry = tk.Entry(root, textvariable=group_input)
 
@@ -39,12 +51,12 @@ def start_button_click():
 
         # кнопка парса и поле результата
         parse_button = tk.Button(root, text='Спарсить на изи', bg='lightblue', font=32, command=parse_click)
-        parse_result_text = tk.StringVar(value="здесь будет результат парса...")
-        parse_result_label = tk.Label(root, textvariable=parse_result_text, font=('Aerial', 17),
-                                      anchor="e", justify=tk.CENTER)
+        #parse_result_text = tk.StringVar(value="здесь будет результат парса...")
+        #parse_result_label = tk.Label(root, textvariable=parse_result_text, font=('Aerial', 17),
+                                      #anchor="e", justify=tk.CENTER)
 
-        parse_button.grid(row=5, column=2, rowspan=2)
-        parse_result_label.place(anchor=tk.CENTER, relx=.5, rely=.3)
+        parse_button.grid(row=2, column=1, rowspan=1)
+        #parse_result_label.place(anchor=tk.CENTER, relx=.5, rely=.3)
 
 
     else:
