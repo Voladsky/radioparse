@@ -7,6 +7,8 @@ import datetime
 current_week = 1
 last_sunday = datetime.date(2023, 2, 5)
 
+# Способ получить текущую неделю в семестре на основании сравнения с последним записаным воскресеньем
+# (сейчас последнее воскресенье захардкожено)
 def update_current_week():
     global current_week, last_sunday
     cur_time = datetime.date.today()
@@ -15,7 +17,7 @@ def update_current_week():
         current_week += (new_sunday - last_sunday).days // 7
 
 
-
+# Парсинг таблицы с ссылками на расписание групп
 def get_link_table(url):
     page = requests.get(url)
     soup = BeautifulSoup(page.text, 'lxml')
@@ -37,6 +39,8 @@ def get_link_table(url):
     dftable = pd.DataFrame(rows[1:], columns=rows[0])
     return dftable
 
+
+# Переход по таблице ссылок и парс главной таблицы расписания
 def get_timetable(year, group):
     global current_week
     update_current_week()
@@ -66,6 +70,7 @@ def get_timetable(year, group):
                 row.append(text)
         rows.append(row)
     #dftable = pd.DataFrame(rows[1:], columns=rows[0])
+    # транспонируем получившийся результат для удобства
     return list(map(list, zip(*rows[1:])))
 
 if __name__ == "__main__":
