@@ -12,6 +12,7 @@
   * BeautifulSoup
   * requests
   * pandas
+  * lxml
   * datetime
 
 ## Использование
