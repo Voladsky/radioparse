@@ -13,6 +13,7 @@
   * requests
   * pandas
   * datetime
+  * lxml
 
 ## Использование
 1. Запустите программу
