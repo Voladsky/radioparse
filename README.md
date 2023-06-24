@@ -12,7 +12,9 @@
   * BeautifulSoup
   * requests
   * pandas
+  * lxml
   * datetime
+  * lxml
 
 ## Использование
 1. Запустите программу
